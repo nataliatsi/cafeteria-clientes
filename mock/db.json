@@ -1,0 +1,5 @@
+{
+    "clientes": [
+      { "id": 1, "nome": "Natália Gomes", "email": "nataliagomes@gmail.com", "nascimento": "07/09/1999", "cep": "58255000" }
+    ]
+}
