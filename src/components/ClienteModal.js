@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
-import api from '../services/api';
 
 const ClienteModal = ({ show, handleShow, clientes, setClientes, handleReset }) => {
   const [cliente, setCliente] = useState({});
@@ -10,20 +9,36 @@ const ClienteModal = ({ show, handleShow, clientes, setClientes, handleReset }) 
     const name = event.target.name;
     const value = event.target.value;
     setCliente((values) => ({ ...values, [name]: value }));
-    console.log(cliente);
   };
 
-  const handleClickCadastrar = async (event) => {
-    const data = await api.create(cliente);
-    setClientes([...clientes, data]);
-  };
+
+  const handleCreateClient = async () => {
+    try {
+      const res = await fetch('http://localhost:3030/clientes', { 
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(cliente)
+      });
+      const data = await res.json();
+      if(!res.ok) {
+        console.log(data.description);
+        return;
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   return (
     <div>
       <Modal show={show} onHide={handleShow}>
-      <Formik initialValues={{ nome: '', email: '', nascimento: '', cep: '' }} onSubmit={(cliente) => handleChangeCadastrar(cliente)}> 
-        {({handleChangeCadastrar, handleClickCadastrar}) => (
-          <Form onSubmit={handleChangeCadastrar}>
+      <Formik initialValues={{ nome: '', email: '', nascimento: '', cep: '' }} onSubmit={(cliente) => handleCreateClient(cliente)}> 
+        {({ handleSubmit, handleBlur }) => (
+          <Form onSubmit={handleSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>Cadastro</Modal.Title>
           </Modal.Header>
@@ -36,6 +51,7 @@ const ClienteModal = ({ show, handleShow, clientes, setClientes, handleReset }) 
                 controlid="nome"
                 value={cliente.nome}
                 onChange={handleChangeCadastrar}
+                onBlur={handleBlur}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -73,9 +89,13 @@ const ClienteModal = ({ show, handleShow, clientes, setClientes, handleReset }) 
             <Button variant="secondary" onClick={handleReset}>
               Limpar
             </Button>
-            <Button variant="primary" onClick={handleClickCadastrar}>
-              Cadastrar
-            </Button>
+            <Button 
+              variant="primary" 
+              as='input'
+              type='submit'
+              value='Cadastrar'
+              onClick={handleChangeCadastrar}
+            />
           </Modal.Footer>
         </Form>
       )}

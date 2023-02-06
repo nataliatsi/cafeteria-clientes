@@ -36,19 +36,23 @@ const Clientes = () => {
     setNome(event.target.value);
   };
 
-  const handleClickBuscar = (event) => {
-    fetch(`http://localhost:8080/clientes?q=${nome}`, { method: 'GET' })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setClientes(data);
-      })
-      .catch((error) => {
-        console.log('Resposta com insucesso!');
-      })
-      .finally();
-  };
+
+
+  const handleClickBuscar = async () => {
+    fetch(`http://localhost:3030/clientes?q=${nome}`, { method: 'GET' })
+       .then((response) => {
+         return response.json();
+       })
+       .then((data) => {
+         setClientes(data);
+       })
+       .catch((error) => {
+         console.log('Resposta sem sucesso!');
+       })
+       .finally();
+   };
+ 
+  
 
   const handleClickAdicionar = (event) => {
     setShow(true);

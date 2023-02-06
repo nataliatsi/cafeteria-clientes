@@ -1,11 +1,11 @@
 const readAll = async () => {
-  const response = await fetch('http://localhost:8080/clientes');
+  const response = await fetch('http://localhost:3030/clientes');
 
   return await response.json();
 };
 
 async function create(cliente) {
-  let response = await fetch('http://localhost:8080/clientes', {
+  let response = await fetch('http://localhost:3030/clientes', {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
